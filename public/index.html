@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa SPE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rifa SPE - Thiago</h1>
+        <p>Em prol da viagem dos estudantes do Capítulo Estudantil SPE UFES para participação
+            do congresso OTC no Rio de Janeiro - RJ. Cada número custa R$ 2,00 e você concorre 
+            a um pix de R$ 300,00. Preencha seus dados e escolha seus números. Boa sorte!
+        </p>
+        
+        <div class="form-comprador">
+            <input type="text" id="nome" placeholder="Seu nome completo" required>
+            <input type="tel" id="telefone" placeholder="Seu WhatsApp (DDD + Número)" required>
+        </div>
+
+        <div id="grade-numeros" class="grade-numeros">
+            </div>
+
+        <div class="resumo">
+            <h2>Resumo da Compra</h2>
+            <p>Números: <span id="numeros-selecionados">Nenhum</span></p>
+            <p>Total: <strong id="valor-total">R$ 0,00</strong></p>
+            <button id="btn-comprar" disabled>Comprar Agora</button>
+        </div>
+
+        <div id="modal-pix" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Pagamento via PIX</h2>
+                <p>Copie o código abaixo e pague no seu aplicativo do banco para garantir seus números!</p>
+                <textarea id="pix-code" rows="5" readonly></textarea>
+                <button id="btn-copiar">Copiar Código</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

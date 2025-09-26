@@ -1,0 +1,125 @@
+body { 
+    font-family: sans-serif; 
+    background-color: #f4f4f9; 
+    color: #333; 
+    display: flex; 
+    justify-content: center; 
+    padding: 20px; 
+}
+
+.container { 
+    background-color: #fff; 
+    padding: 25px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    width: 100%; 
+    max-width: 800px; 
+    text-align: center; 
+}
+
+.form-comprador { 
+    display: flex; 
+    gap: 10px; 
+    margin: 20px 0; 
+}
+
+.form-comprador input { 
+    flex: 1; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+}
+
+.grade-numeros { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
+    gap: 10px; 
+    margin: 20px 0; 
+}
+
+.numero { 
+    padding: 15px 5px; 
+    border-radius: 5px; 
+    font-weight: bold; 
+    transition: all 0.2s ease; 
+}
+
+.numero.disponivel { 
+    border: 1px solid #ccc; 
+    cursor: pointer; 
+}
+
+.numero.disponivel:hover { 
+    background-color: #e9e9e9; 
+}
+
+.numero.selecionado { 
+    background-color: #ffc107; 
+    color: #fff; 
+    border-color: #ffc107; 
+    cursor: pointer; 
+}
+
+.numero.vendido { 
+    background-color: #dc3545; 
+    color: #fff; 
+    border-color: #dc3545; 
+    cursor: not-allowed; 
+    opacity: 0.8; 
+}
+
+.resumo { 
+    margin-top: 20px; 
+    padding-top: 20px; 
+    border-top: 1px solid #eee; 
+}
+
+button { 
+    background-color: #007bff; 
+    color: white; 
+    padding: 12px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 16px; 
+}
+
+button:disabled { 
+    background-color: #ccc; 
+    cursor: not-allowed; 
+}
+
+.modal { 
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0; 
+    top: 0; 
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); 
+}
+
+.modal-content { 
+    background-color: #fefefe; 
+    margin: 15% auto; 
+    padding: 20px; 
+    border: 1px solid #888; 
+    width: 80%; 
+    max-width: 500px; 
+    border-radius: 8px; 
+}
+
+.close-button { 
+    color: #aaa; 
+    float: right; 
+    font-size: 28px; 
+    font-weight: bold; 
+    cursor: pointer; 
+}
+
+#pix-code { 
+    width: 95%; 
+    margin: 15px 0; 
+}
