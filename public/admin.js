@@ -6,10 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('login-button');
     const loginError = document.getElementById('login-error');
     const listaCompradores = document.getElementById('lista-compradores');
+    const exportCsvButton = document.getElementById('export-csv-button');
     
     let adminPassword = '';
+    let todosOsNumeros = [];
 
     loginButton.addEventListener('click', handleLogin);
+    exportCsvButton.addEventListener('click', exportarParaCSV);
     // Permite logar apertando "Enter" no campo de senha
     passwordInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             adminPassword = inputPassword;
             loginError.style.display = 'none';
             loginScreen.style.display = 'none';
-        adminContent.style.display = 'block';
+            adminContent.style.display = 'block';
             
             carregarCompradores();
 
@@ -51,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     async function carregarCompradores() {
         try {
             const response = await fetch('/api/numeros');
-            const numeros = await response.json();
-            const vendidos = numeros.filter(n => n.status === 'vendido');
+            todosOsNumeros = await response.json();
+            const vendidos = todosOsNumeros.filter(n => n.status === 'vendido');
 
             listaCompradores.innerHTML = ''; // Limpa a lista
 
@@ -81,6 +84,35 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Erro ao carregar compradores:', error);
             alert('Não foi possível carregar os dados.');
         }
+    }
+
+    function exportarParaCSV() {
+        const vendidos = todosOsNumeros.filter(n => n.status === 'vendido');
+
+        if (vendidos.length === 0) {
+            alert('Nenhum número vendido para exportar.');
+            return;
+        }
+
+        const headers = ['Numero', 'Nome do Comprador', 'Telefone'];
+        const csvRows = vendidos.map(v => {
+            const numero = v.id;
+            const nome = `"${v.comprador_nome || ''}"`;
+            const telefone = `"${v.comprador_telefone || ''}"`;
+            return [numero, nome, telefone].join(',');
+        });
+
+        const csvString = [headers.join(','), ...csvRows].join('\n');
+
+        const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'relatorio_rifa.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     async function liberarNumero(numeroId) {
