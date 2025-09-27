@@ -101,7 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return [numero, nome, telefone].join(',');
         });
 
-        const blob = new Blob(['\uFEFF' + csvRows], { type: 'text/csv;charset=utf-8;' });
+        const csvString = csvRows.join('\n');
+
+        const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
         link.setAttribute('href', url);
