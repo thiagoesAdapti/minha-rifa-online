@@ -95,5 +95,20 @@ app.post('/api/liberar-numero', async (req, res) => {
 
     res.status(200).json({ success: true, message: `Número ${numeroId} liberado.` });
 });
+
+// Endpoint para validar o login do Admin
+app.post('/api/login', (req, res) => {
+    const { senha } = req.body;
+
+    if (!senha) {
+        return res.status(400).json({ success: false, error: 'Senha não fornecida.' });
+    }
+
+    if (senha === process.env.ADMIN_PASSWORD) {
+        res.status(200).json({ success: true });
+    } else {
+        res.status(401).json({ success: false, error: 'Senha incorreta.' });
+    }
+});
     
 module.exports = app;

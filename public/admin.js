@@ -17,19 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function handleLogin() {
+    async function handleLogin() {
         const inputPassword = passwordInput.value;
         if (!inputPassword) {
             alert('Por favor, digite uma senha.');
             return;
         }
-        
-        // Guarda a senha e tenta carregar o painel
-        adminPassword = inputPassword;
-        loginScreen.style.display = 'none';
+
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ senha: inputPassword })
+            });
+
+            if (!response.ok) {
+                throw new Error('Senha incorreta.');
+            }
+
+            adminPassword = inputPassword;
+            loginError.style.display = 'none';
+            loginScreen.style.display = 'none';
         adminContent.style.display = 'block';
-        
-        carregarCompradores();
+            
+            carregarCompradores();
+
+        } catch (error) {
+            console.error('Falha no login:', error);
+            loginError.style.display = 'block'; 
+        }
     }
 
     async function carregarCompradores() {
@@ -81,13 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                // Se a senha estiver errada, volta para a tela de login
-                if (response.status === 401) {
-                    loginError.style.display = 'block';
-                    adminContent.style.display = 'none';
-                    loginScreen.style.display = 'block';
-                    passwordInput.value = ''; // Limpa o campo de senha
-                }
                 throw new Error(errorData.error || 'Erro no servidor.');
             }
             
@@ -96,9 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Erro ao liberar número:', error);
-            if(response.status !== 401) {
-                alert(`Erro: ${error.message}`);
-            }
+            alert(`Erro: ${error.message}`);
         }
     }
 });
