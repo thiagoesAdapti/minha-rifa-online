@@ -94,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const headers = ['Numero', 'Nome do Comprador', 'Telefone'];
         const csvRows = vendidos.map(v => {
             const numero = v.id;
             const nome = `"${v.comprador_nome || ''}"`;
@@ -102,9 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return [numero, nome, telefone].join(',');
         });
 
-        const csvString = [headers.join(','), ...csvRows].join('\n');
-
-        const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' });
+        const blob = new Blob(['\uFEFF' + csvRows], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
         link.setAttribute('href', url);
