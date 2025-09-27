@@ -70,6 +70,10 @@ body {
   color: #28a745;
 }
 
+.detalhe-box:last-child strong {
+  color: #007bff;
+}
+
 .info-rifa .boa-sorte {
   font-weight: 500;
   color: #333;
