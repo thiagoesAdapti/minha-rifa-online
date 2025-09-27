@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Função que inicia o polling a cada 2 segundos
+    // Função que inicia o polling a cada segundo
     function iniciarPollingDeNumeros() {
-        setInterval(atualizarGradeEmTempoReal, 2000);
+        setInterval(atualizarGradeEmTempoReal, 1000);
     }
 
     // Inicia a aplicação
