@@ -28,7 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('/api/numeros');
             todosOsNumeros = await response.json();
-            
+
+            const spanDisponiveis = document.getElementById('numeros-disponiveis');
+            const spanTotal = document.getElementById('numeros-total');
+            const disponiveis = todosOsNumeros.filter(n => n.status === 'disponivel').length;
+            const total = todosOsNumeros.length;
+
+            spanDisponiveis.textContent = disponiveis;
+            spanTotal.textContent = total;
+
             gradeNumeros.innerHTML = '';
             todosOsNumeros.forEach(numero => {
                 const numeroDiv = document.createElement('div');
@@ -41,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     numeroDiv.title = 'Comprado';
                 }
-                
                 gradeNumeros.appendChild(numeroDiv);
             });
         } catch (error) {

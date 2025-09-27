@@ -75,6 +75,27 @@ body {
   color: #333;
 }
 
+.stats-rifa {
+  background-color: #e9ecef;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin: 25px auto;
+  text-align: center;
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stats-rifa p {
+  margin: 0;
+  font-size: 1.1em;
+  color: #343a40;
+}
+
+.stats-rifa span {
+  font-weight: bold;
+  color: #007bff;
+}
+
 .grade-numeros { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); 
