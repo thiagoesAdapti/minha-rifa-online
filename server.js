@@ -63,5 +63,37 @@ app.post('/api/comprar', async (req, res) => {
 
     res.json({ success: true, pixCode: pixCode });
 });
+
+// Endpoint para liberar um número
+app.post('/api/liberar-numero', async (req, res) => {
+    const { numeroId, senha } = req.body;
+
+    // Verificação de segurança
+    if (senha !== process.env.ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Senha de administrador incorreta.' });
+    }
+
+    // Lógica para liberar o número
+    let numeros = await kv.get('rifa_numeros_completa');
+    if (!numeros) {
+        return res.status(500).json({ error: 'Banco de dados não encontrado.' });
+    }
+
+    const numeroParaLiberar = numeros.find(n => n.id === numeroId);
+
+    if (!numeroParaLiberar) {
+        return res.status(404).json({ error: 'Número não encontrado.' });
+    }
+
+    // Atualiza os dados
+    numeroParaLiberar.status = 'disponivel';
+    numeroParaLiberar.comprador_nome = null;
+    numeroParaLiberar.comprador_telefone = null;
+
+    // Salva de volta no banco de dados
+    await kv.set('rifa_numeros_completa', numeros);
+
+    res.status(200).json({ success: true, message: `Número ${numeroId} liberado.` });
+});
     
 module.exports = app;
