@@ -156,14 +156,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const numeroDiv = document.querySelector(`.numero[data-id='${numeroServidor.id}']`);
                 if (!numeroDiv) return;
 
-                if (numeroServidor.status === 'vendido' && numeroDiv.classList.contains('disponivel')) {
-                    console.log(`Número ${numeroServidor.id} foi vendido. Atualizando...`);
+                if (numeroServidor.status === 'vendido' && !numeroDiv.classList.contains('vendido')) {
                     
-                    numeroDiv.replaceWith(numeroDiv.cloneNode(true));
-                    
-                    const novoNumeroDiv = document.querySelector(`.numero[data-id='${numeroServidor.id}']`);
-                    novoNumeroDiv.className = 'numero vendido';
-                    novoNumeroDiv.title = 'Comprado';
+                    const numeroDivAtualizado = numeroDiv.cloneNode(true);
+                    numeroDivAtualizado.className = 'numero vendido';
+                    numeroDivAtualizado.title = `Comprado por: ${numeroServidor.comprador_nome}`;
+                    numeroDiv.parentNode.replaceChild(numeroDivAtualizado, numeroDiv);
+
+                    // Verifica se o número comprado agora estava na lista de seleção do usuário atual
+                    const numeroId = parseInt(numeroServidor.id);
+                    if (numerosSelecionados.includes(numeroId)) {
+                        numerosSelecionados = numerosSelecionados.filter(n => n !== numeroId);
+                        atualizarResumoEBotao();
+                    }
                 }
             });
         } catch (error) {
@@ -171,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Função que inicia o polling a cada 15 segundos
+    // Função que inicia o polling a cada 2 segundos
     function iniciarPollingDeNumeros() {
-        setInterval(atualizarGradeEmTempoReal, 15000);
+        setInterval(atualizarGradeEmTempoReal, 2000);
     }
 
     // Inicia a aplicação
