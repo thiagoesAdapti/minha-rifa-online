@@ -49,6 +49,10 @@ body {
     cursor: pointer; 
 }
 
+.numero.disponivel:hover {
+    background-color: #e9e9e9;
+}
+
 .numero.selecionado { 
     background-color: #28a745; 
     color: #fff; 

@@ -57,8 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (numeroDiv.classList.contains('selecionado')) {
             numerosSelecionados.push(numeroId);
+            numeroDiv.classList.remove('disponivel');
         } else {
             numerosSelecionados = numerosSelecionados.filter(n => n !== numeroId);
+            numeroDiv.classList.add('disponivel');
         }
         
         atualizarResumoEBotao();
