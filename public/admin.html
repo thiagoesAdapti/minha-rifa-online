@@ -5,23 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Controle - Rifa</title>
     <style>
-        body { font-family: sans-serif; margin: 0; background-color: #f4f4f9; }
-        .container { max-width: 800px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1 { text-align: center; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f4f4f9; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 800px; margin: 20px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        p { color: #666; text-align: center; }
+        
+        /* --- Estilos da Tela de Login --- */
+        #login-screen { max-width: 400px; margin: auto; }
+        #login-screen input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        #login-screen button { width: 100%; background-color: #007bff; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        #login-screen button:hover { background-color: #0056b3; }
+        #login-error { color: #dc3545; text-align: center; margin-top: 10px; display: none; }
+
+        /* --- Estilos do Conteúdo do Admin --- */
         #lista-compradores { list-style: none; padding: 0; }
-        #lista-compradores li { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        #lista-compradores li:last-child { border-bottom: none; }
-        #lista-compradores span { flex-basis: 30%; }
-        button { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-        button:hover { opacity: 0.8; }
+        #lista-compradores li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        #lista-compradores span { flex-basis: 30%; min-width: 150px; margin: 5px 0; }
+        #lista-compradores button { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        #lista-compradores button:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Painel de Controle da Rifa</h1>
-        <p>Aqui estão listados todos os números que foram vendidos. Se precisar, clique em "Liberar" para tornar um número disponível novamente.</p>
-        <ul id="lista-compradores">
-            </ul>
+        
+        <div id="login-screen">
+            <h1>Acesso Restrito</h1>
+            <p>Por favor, insira a senha para gerenciar a rifa.</p>
+            <input type="password" id="password-input" placeholder="Senha">
+            <button id="login-button">Entrar</button>
+            <p id="login-error">Senha incorreta.</p>
+        </div>
+
+        <div id="admin-content" style="display: none;">
+            <h1>Painel de Controle da Rifa</h1>
+            <p>Aqui estão listados todos os números que foram vendidos. Se precisar, clique em "Liberar" para tornar um número disponível novamente.</p>
+            <ul id="lista-compradores">
+                </ul>
+        </div>
+
     </div>
     <script src="admin.js"></script>
 </body>
