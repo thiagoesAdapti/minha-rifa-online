@@ -57,13 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function selecionarNumero(numeroDiv) {
         const numeroId = parseInt(numeroDiv.dataset.id);
         numeroDiv.classList.toggle('selecionado');
+        numeroDiv.classList.toggle('disponivel');
         
         if (numeroDiv.classList.contains('selecionado')) {
             numerosSelecionados.push(numeroId);
-            numeroDiv.classList.remove('disponivel');
         } else {
             numerosSelecionados = numerosSelecionados.filter(n => n !== numeroId);
-            numeroDiv.classList.add('disponivel');
         }
         
         atualizarResumoEBotao();
@@ -142,5 +141,46 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { btnCopiar.textContent = 'Copiar Código'; }, 2000);
     });
 
-    carregarNumeros();
+    // Função que verifica o status dos números e atualiza a tela
+    async function atualizarGradeEmTempoReal() {
+        try {
+            const response = await fetch('/api/numeros');
+            const numerosDoServidor = await response.json();
+
+            // Atualiza a quantidade disponível
+            const spanDisponiveis = document.getElementById('numeros-disponiveis');
+            const disponiveis = numerosDoServidor.filter(n => n.status === 'disponivel').length;
+            spanDisponiveis.textContent = disponiveis;
+
+            numerosDoServidor.forEach(numeroServidor => {
+                const numeroDiv = document.querySelector(`.numero[data-id='${numeroServidor.id}']`);
+                if (!numeroDiv) return;
+
+                if (numeroServidor.status === 'vendido' && numeroDiv.classList.contains('disponivel')) {
+                    console.log(`Número ${numeroServidor.id} foi vendido. Atualizando...`);
+                    
+                    numeroDiv.replaceWith(numeroDiv.cloneNode(true));
+                    
+                    const novoNumeroDiv = document.querySelector(`.numero[data-id='${numeroServidor.id}']`);
+                    novoNumeroDiv.className = 'numero vendido';
+                    novoNumeroDiv.title = 'Comprado';
+                }
+            });
+        } catch (error) {
+            console.error('Erro durante o polling:', error);
+        }
+    }
+
+    // Função que inicia o polling a cada 15 segundos
+    function iniciarPollingDeNumeros() {
+        setInterval(atualizarGradeEmTempoReal, 15000);
+    }
+
+    // Inicia a aplicação
+    async function iniciar() {
+        await carregarNumeros();
+        iniciarPollingDeNumeros();
+    }
+
+    iniciar();
 });
