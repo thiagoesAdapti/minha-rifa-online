@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Atualiza valor total
         const valorTotal = numerosSelecionados.length * PRECO_POR_NUMERO;
-        valorTotalSpan.textContent = `R$ ${valorTotal.toFixed(2)}`;
+        valorTotalSpan.textContent = valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
         // Ignora a máscara para contar os dígitos
         const telefoneSemMascara = mascaraTelefone.unmaskedValue;
