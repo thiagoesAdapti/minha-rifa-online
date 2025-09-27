@@ -30,12 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
             todosOsNumeros = await response.json();
 
             const spanDisponiveis = document.getElementById('numeros-disponiveis');
-            const spanTotal = document.getElementById('numeros-total');
             const disponiveis = todosOsNumeros.filter(n => n.status === 'disponivel').length;
-            const total = todosOsNumeros.length;
-
             spanDisponiveis.textContent = disponiveis;
-            spanTotal.textContent = total;
 
             gradeNumeros.innerHTML = '';
             todosOsNumeros.forEach(numero => {
