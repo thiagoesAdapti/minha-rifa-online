@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.querySelector('.close-button');
     const btnCopiar = document.getElementById('btn-copiar');
     
+    // Máscara para o número de telefone
+    const mascaraTelefoneOpcoes = {
+        mask: '(00) 00000-0000'
+    };
+    const mascaraTelefone = IMask(inputTelefone, mascaraTelefoneOpcoes);
+
     const PRECO_POR_NUMERO = 2.00;
     let numerosSelecionados = [];
     let todosOsNumeros = [];
@@ -72,8 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const valorTotal = numerosSelecionados.length * PRECO_POR_NUMERO;
         valorTotalSpan.textContent = `R$ ${valorTotal.toFixed(2)}`;
 
+        // Ignora a máscara para contar os dígitos
+        const telefoneSemMascara = mascaraTelefone.unmaskedValue;
+        
         // Habilita ou desabilita o botão de comprar
-        if (numerosSelecionados.length > 0 && inputNome.value.trim() !== '' && inputTelefone.value.trim() !== '') {
+        if (numerosSelecionados.length > 0 && inputNome.value.trim() !== '' && telefoneSemMascara.length === 11) {
             btnComprar.disabled = false;
         } else {
             btnComprar.disabled = true;
@@ -89,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnComprar.textContent = 'Processando...';
 
         const nome = inputNome.value.trim();
-        const telefone = inputTelefone.value.trim();
+        const telefone = mascaraTelefone.value;
 
         try {
             const response = await fetch('/api/comprar', {
