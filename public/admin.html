@@ -53,8 +53,7 @@
             border-bottom: 1px solid #eee;
             text-align: center;
         }
-        #export-csv-button {
-            background-color: #17a2b8;
+        #export-csv-button, #logout-button {
             color: white;
             border: none;
             padding: 10px 15px;
@@ -63,8 +62,17 @@
             font-size: 14px;
             font-weight: bold;
         }
+        #export-csv-button {
+            background-color: #17a2b8;
+        }
         #export-csv-button:hover {
             background-color: #138496;
+        }
+        #logout-button {
+            background-color: #6c757d;
+        }
+        #logout-button:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
@@ -83,6 +91,7 @@
             <h1>Painel de Controle da Rifa</h1>
             <div class="actions-bar">
                 <button id="export-csv-button">Exportar CSV</button>
+                <button id="logout-button">Sair</button> </div>
             </div>
             <p>Aqui estão listados todos os números que foram vendidos. Se precisar, clique em "Liberar" para tornar um número disponível novamente.</p>
             <ul id="lista-compradores">

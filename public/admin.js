@@ -7,13 +7,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginError = document.getElementById('login-error');
     const listaCompradores = document.getElementById('lista-compradores');
     const exportCsvButton = document.getElementById('export-csv-button');
+    const logoutButton = document.getElementById('logout-button');
     
     let adminPassword = '';
     let todosOsNumeros = [];
     let pollingInterval = null;
 
+    function checkSession() {
+        const storedPassword = sessionStorage.getItem('adminRifaPassword');
+        if (storedPassword) {
+            adminPassword = storedPassword;
+            showAdminPanel();
+        }
+    }
+
+    function showAdminPanel() {
+        loginScreen.style.display = 'none';
+        adminContent.style.display = 'block';
+        carregarCompradores();
+        iniciarPollingAdmin();
+    }
+
     loginButton.addEventListener('click', handleLogin);
     exportCsvButton.addEventListener('click', exportarParaCSV);
+    logoutButton.addEventListener('click', handleLogout);
     // Permite logar apertando "Enter" no campo de senha
     passwordInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
@@ -40,17 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             adminPassword = inputPassword;
-            loginError.style.display = 'none';
-            loginScreen.style.display = 'none';
-            adminContent.style.display = 'block';
-            
-            await carregarCompradores();
-            iniciarPollingAdmin();
+            sessionStorage.setItem('adminRifaPassword', inputPassword);
+
+            showAdminPanel();
 
         } catch (error) {
             console.error('Falha no login:', error);
             loginError.style.display = 'block'; 
         }
+    }
+
+    function handleLogout() {
+        sessionStorage.removeItem('adminRifaPassword');
+        if (pollingInterval) clearInterval(pollingInterval);
+        location.reload();
     }
 
     async function carregarCompradores() {
@@ -146,4 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Erro: ${error.message}`);
         }
     }
+
+    checkSession();
 });
