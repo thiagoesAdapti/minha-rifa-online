@@ -181,6 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(atualizarGradeEmTempoReal, 1000);
     }
 
+    const filtroToggle = document.getElementById('disponiveis-toggle');
+    filtroToggle.addEventListener('change', () => {
+        document.body.classList.toggle('hide-sold', filtroToggle.checked);
+    });
+
     // Inicia a aplicação
     async function iniciar() {
         await carregarNumeros();
