@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     const numeroDivAtualizado = numeroDiv.cloneNode(true);
                     numeroDivAtualizado.className = 'numero vendido';
-                    numeroDivAtualizado.title = `Comprado por: ${numeroServidor.comprador_nome}`;
+                    numeroDivAtualizado.title = 'Comprado';
                     numeroDiv.parentNode.replaceChild(numeroDivAtualizado, numeroDiv);
 
                     // Verifica se o número comprado agora estava na lista de seleção do usuário atual
@@ -169,6 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         numerosSelecionados = numerosSelecionados.filter(n => n !== numeroId);
                         atualizarResumoEBotao();
                     }
+                } else if (numeroServidor.status === 'disponivel' && numeroDiv.classList.contains('vendido')) {
+                    const numeroDivAtualizado = numeroDiv.cloneNode(true);
+                    numeroDivAtualizado.className = 'numero disponivel';
+                    numeroDivAtualizado.removeAttribute('title');
+                    numeroDivAtualizado.addEventListener('click', () => selecionarNumero(numeroDivAtualizado));
+                    numeroDiv.parentNode.replaceChild(numeroDivAtualizado, numeroDiv);
                 }
             });
         } catch (error) {
