@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let adminPassword = '';
     let todosOsNumeros = [];
+    let pollingInterval = null;
 
     loginButton.addEventListener('click', handleLogin);
     exportCsvButton.addEventListener('click', exportarParaCSV);
@@ -43,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
             loginScreen.style.display = 'none';
             adminContent.style.display = 'block';
             
-            carregarCompradores();
+            await carregarCompradores();
+            iniciarPollingAdmin();
 
         } catch (error) {
             console.error('Falha no login:', error);
@@ -82,8 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Erro ao carregar compradores:', error);
-            alert('Não foi possível carregar os dados.');
+            if (pollingInterval) clearInterval(pollingInterval);
         }
+    }
+
+    function iniciarPollingAdmin() {
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(carregarCompradores, 5000);
     }
 
     function exportarParaCSV() {
