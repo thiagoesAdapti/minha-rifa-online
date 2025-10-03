@@ -8,10 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const listaCompradores = document.getElementById('lista-compradores');
     const exportCsvButton = document.getElementById('export-csv-button');
     const logoutButton = document.getElementById('logout-button');
+    const sortByNumberButton = document.getElementById('sort-by-number-button');
+    const sortByNameButton = document.getElementById('sort-by-name-button');
     
     let adminPassword = '';
     let todosOsNumeros = [];
     let pollingInterval = null;
+    let currentSortBy = 'numero';
 
     function checkSession() {
         const storedPassword = sessionStorage.getItem('adminRifaPassword');
@@ -31,12 +34,49 @@ document.addEventListener('DOMContentLoaded', () => {
     loginButton.addEventListener('click', handleLogin);
     exportCsvButton.addEventListener('click', exportarParaCSV);
     logoutButton.addEventListener('click', handleLogout);
+    sortByNumberButton.addEventListener('click', () => setSortBy('numero'));
+    sortByNameButton.addEventListener('click', () => setSortBy('nome'));
+    passwordInput.addEventListener('keyup', (event) => { if (event.key === 'Enter') { handleLogin(); } });
     // Permite logar apertando "Enter" no campo de senha
     passwordInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
             handleLogin();
         }
     });
+
+    function setSortBy(sortBy) {
+        currentSortBy = sortBy;
+        renderCompradores();
+    }
+
+    function renderCompradores() {
+        sortByNumberButton.classList.toggle('active', currentSortBy === 'numero');
+        sortByNameButton.classList.toggle('active', currentSortBy === 'nome');
+
+        const vendidos = todosOsNumeros.filter(n => n.status === 'vendido');
+        
+        if (currentSortBy === 'nome') {
+            vendidos.sort((a, b) => (a.comprador_nome || '').localeCompare(b.comprador_nome || ''));
+        } else { 
+            vendidos.sort((a, b) => a.id - b.id);
+        }
+
+        listaCompradores.innerHTML = ''; 
+        if (vendidos.length === 0) {
+            listaCompradores.innerHTML = '<li>Nenhum número vendido ainda.</li>';
+            return;
+        }
+
+        vendidos.forEach(numero => {
+            const item = document.createElement('li');
+            item.innerHTML = `<span><strong>Número:</strong> ${numero.id}</span><span><strong>Nome:</strong> ${numero.comprador_nome}</span><span><strong>Tel:</strong> ${numero.comprador_telefone}</span>`;
+            const btnLiberar = document.createElement('button');
+            btnLiberar.textContent = 'Liberar';
+            btnLiberar.onclick = () => liberarNumero(numero.id);
+            item.appendChild(btnLiberar);
+            listaCompradores.appendChild(item);
+        });
+    }
 
     async function handleLogin() {
         const inputPassword = passwordInput.value;
@@ -77,31 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('/api/numeros');
             todosOsNumeros = await response.json();
-            const vendidos = todosOsNumeros.filter(n => n.status === 'vendido');
-
-            listaCompradores.innerHTML = ''; // Limpa a lista
-
-            if (vendidos.length === 0) {
-                listaCompradores.innerHTML = '<li>Nenhum número vendido ainda.</li>';
-                return;
-            }
-
-            vendidos.sort((a, b) => a.id - b.id).forEach(numero => {
-                const item = document.createElement('li');
-                item.innerHTML = `
-                    <span><strong>Número:</strong> ${numero.id}</span>
-                    <span><strong>Nome:</strong> ${numero.comprador_nome}</span>
-                    <span><strong>Tel:</strong> ${numero.comprador_telefone}</span>
-                `;
-                
-                const btnLiberar = document.createElement('button');
-                btnLiberar.textContent = 'Liberar';
-                btnLiberar.onclick = () => liberarNumero(numero.id);
-                
-                item.appendChild(btnLiberar);
-                listaCompradores.appendChild(item);
-            });
-
+            renderCompradores();
         } catch (error) {
             console.error('Erro ao carregar compradores:', error);
             if (pollingInterval) clearInterval(pollingInterval);
